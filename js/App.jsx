@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import Header from './Header';
 import Footer from './Footer';
 import Landing from './Landing';
@@ -15,7 +15,6 @@ import Admin from './Admin';
 const App = () => (
   <div className="app">
     <div>
-      <BrowserRouter>
         <div className="app">
           <Switch>
             <Route exact path="/" component={Landing} />
@@ -37,11 +36,14 @@ const App = () => (
               path="/recept/:id"
               component={props => <Recipe postId={props.match.params.id} />}
             />
+            <Route
+              path="/fitnes-kuvar-zdrava-hrana/fitnes-recepti/:id"
+              component={props => <Recipe postId={props.match.params.id} />}
+            />
             <Route path="/kontakt" component={Contact} />
             <Route path="/5eixaGWhWtZqCfTb6sFYE22ugs9uLlA4" component={Admin} />
           </Switch>
         </div>
-      </BrowserRouter>
       <Footer />
     </div>
   </div>

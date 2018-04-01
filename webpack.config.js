@@ -13,7 +13,7 @@ module.exports = {
   // devtool: 'eval',
   output: {
     path: path.join(__dirname, 'public'),
-    filename: 'bundle.js',
+    filename: 'bundle-03-19b-2018.js',
     publicPath: '/public/'
   },
   devServer: {
