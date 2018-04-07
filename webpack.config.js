@@ -1,46 +1,43 @@
 const path = require('path');
 const webpack = require('webpack');
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
-
-module.exports = {
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const config = {
   context: __dirname,
-  entry: [
-    //	"react-hot-loader/patch",
-    //"webpack-dev-server/client?http://localhost:8080",
-    //	"webpack/hot/only-dev-server",
-    './js/ClientApp.jsx'
-  ],
-  // devtool: 'eval',
+  entry: ['babel-polyfill', './js/ClientApp.jsx'],
+  devtool: process.env.NODE_ENV === 'development'
+    ? 'cheap-eval-source-map'
+    : false,
   output: {
-    path: path.join(__dirname, 'public'),
-    filename: 'bundle-03-19b-2018.js',
+    path: path.resolve(__dirname, 'public'),
+    filename: 'bundle.js',
     publicPath: '/public/'
   },
   devServer: {
-    hot: false,
+    hot: true,
     publicPath: '/public/',
     historyApiFallback: true
   },
   resolve: {
-    extensions: ['.js', '.jsx', '.json']
+    extensions: ['.js', '.jsx', '.json'],
+    alias: {
+      react: 'preact-compat',
+      'react-dom': 'preact-compat'
+    }
   },
   stats: {
-    color: true,
+    colors: true,
     reasons: true,
     chunks: false
   },
   plugins: [
-    //new webpack.HotModuleReplacementPlugin(),
-    // new webpack.optimize.OccurenceOrderPlugin(),
-    new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: JSON.stringify('production')
-      }
-    }),
+    // new webpack.HotModuleReplacementPlugin(),
     new webpack.NamedModulesPlugin(),
     new webpack.optimize.UglifyJsPlugin({
       compressor: {
-        warnings: false
+        warnings: false,
+        dead_code: true,
+        drop_debugger: true,
+        drop_console: true
       }
     })
   ],
@@ -48,8 +45,24 @@ module.exports = {
     rules: [
       {
         test: /\.jsx?$/,
-        loader: 'babel-loader'
+        loader: 'babel-loader',
+        include: [
+          path.resolve('js'),
+          path.resolve('node_modules/preact-compat/src')
+        ]
+      },
+      {
+        test: /\.json$/,
+        loader: 'json-loader'
       }
     ]
   }
 };
+
+if (process.env.NODE_ENV === 'development') {
+  config.entry.unshift(
+    'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000'
+  );
+}
+
+module.exports = config;

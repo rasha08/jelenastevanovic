@@ -16,9 +16,14 @@ const app = koa();
 
 app.use(mount('/public', serve('./public')));
 
-app.use(route.get('/', function *() {
-  const rendered = ReactDOMServer.renderToString(React.createElement(ClientApp));
-  this.body = templateFn({body:rendered});
-}));
+app.use(
+  route.get('/', function*(req, res) {
+    console.log(req);
+    const rendered = ReactDOMServer.renderToString(
+      React.createElement(ClientApp)
+    );
+    this.body = templateFn({ body: rendered });
+  })
+);
 
-console.log('listening on port', PORT)
+console.log('listening on port', PORT);

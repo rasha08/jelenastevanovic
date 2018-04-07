@@ -2,6 +2,7 @@ import React from 'react';
 import { PropTypes } from 'prop-types';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import $ from 'jquery';
 
 const Wrapper = styled(Link)`
 text-decoration:none;

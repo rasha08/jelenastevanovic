@@ -48,14 +48,13 @@ class BlogPost extends Component {
     super();
 
     this.state = {
-      openPost: null,
+      openPost: props.post,
       postId: props.postId,
       currentUser: null,
       comment: '',
       commentBox: 'close',
       selectedElements: []
     };
-    this.blogPostsRef = database.ref(`/blogPosts/${props.postId}`);
     this.blogPostsCommentsRef = database.ref(
       `/blogPosts/${props.postId}/comments/`
     );
@@ -105,31 +104,28 @@ class BlogPost extends Component {
     this.toggleCommentBox();
   }
   componentDidMount() {
-    this.blogPostsRef.on('value', snapshot => {
-      let post = snapshot.val();
-      let keyWords = `${post.title} ${post.description}`
-        .toLowerCase()
-        .replace(/-/g, '')
-        .replace(/\"/g, '')
-        .replace(/\:\)/g, '')
-        .replace(/\./g, '')
-        .replace(/\s+/g, ' ')
-        .replace(/\s+/g, ',')
-        .replace(/\,,/, ',');
+    let post = this.state.openPost;
+    let keyWords = `${post.title} ${post.description}`
+      .toLowerCase()
+      .replace(/-/g, '')
+      .replace(/\"/g, '')
+      .replace(/\:\)/g, '')
+      .replace(/\./g, '')
+      .replace(/\s+/g, ' ')
+      .replace(/\s+/g, ',')
+      .replace(/\,,/, ',');
 
-      this.setState({
-        openPost: post
-      });
-
-      let url = `fitnes-blog-saveti-za-zene/fitnes-tekst/${this.state.postId}/${post.category}/${post.title
-        .replace(/\s/g, '-')
-        .replace(/\,/g, '')
-        .replace(/\%/g, '')
-        .toLowerCase()}`;
-      this.setSeoTags(post.title, post.description, keyWords, url, post.imgUrl);
-
-      window.prerenderReady = true;
+    this.setState({
+      openPost: post
     });
+
+    let url = `fitnes-blog-saveti-za-zene/fitnes-tekst/${this.state.postId}/${post.category}/${post.title
+      .replace(/\s/g, '-')
+      .replace(/\,/g, '')
+      .replace(/\%/g, '')
+      .toLowerCase()}`;
+    this.setSeoTags(post.title, post.description, keyWords, url, post.imgUrl);
+
     auth.onAuthStateChanged(currentUser => {
       this.setState({
         currentUser

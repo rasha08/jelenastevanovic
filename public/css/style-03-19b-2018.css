@@ -658,10 +658,8 @@ li.flow-text{
 }
 .recipe-card h2{
 	text-align: center;
-	padding: 5%;
-	background-color: rgba(0, 0, 0, 0.55);
-	box-shadow: 1px 1px 5px rgba(255, 255, 255, 0.4);
-	font-size: 2rem;
+	font-size: 2.5rem;
+	color: goldenrod
 }
 .recipe-card small{
 	color: goldenrod;
@@ -747,6 +745,15 @@ li.flow-text{
 	.contact form{
 		margin-left: 2vw;
 	}
+}
+
+.recipe-card-wrapper {
+	z-index: 999999999999;
+	background-color: rgba(0, 0, 0, 0.3) !important;
+	width: 110%;
+	height: 100%;
+	margin-left: -5%;
+	padding: 6%;
 }
 
 @media screen and (max-width: 901px) and (min-width:300px) {

@@ -34,9 +34,10 @@ const SideMenu = props => (
 );
 
 class Blog extends Component {
-  constructor() {
+  constructor(props) {
     super();
     this.state = {
+      posts: props.posts,
       openPost: null,
       workoutPosts: [],
       healthPosts: [],
@@ -45,54 +46,48 @@ class Blog extends Component {
       toggle: 'closed',
       selectedElements: []
     };
-    this.blogPostsRef = database.ref('/blogPosts');
   }
   componentDidMount() {
-    this.blogPostsRef.on('value', snapshot => {
-      let posts = snapshot.val();
-      let keys = Object.keys(posts);
-      let postsArray = [];
-      let keyWords = [];
+    let posts = this.state.posts;
+    let keys = Object.keys(posts);
+    let postsArray = [];
+    let keyWords = [];
 
-      map(posts, post => {
-        postsArray.push(post);
-        keyWords.push(post.title.toLowerCase());
-      });
-
-      for (let i = 0; i < postsArray.length; i++) {
-        postsArray[i].key = keys[i];
-      }
-
-      this.setState({
-        posts: postsArray,
-        workoutPosts: postsArray
-          .filter(post => post.category === 'vežbanje')
-          .reverse(),
-        healthPosts: postsArray
-          .filter(post => post.category === 'zdravlje')
-          .reverse(),
-        foodPosts: postsArray
-          .filter(post => post.category === 'hrana')
-          .reverse()
-      });
-
-      this.setMetaTag(
-        'name',
-        'keywords',
-        keyWords
-          .reduce((prev, curr) => prev + ' ' + curr)
-          .replace(/-/g, '')
-          .replace(/\"/g, '')
-          .replace(/\:\)/g, '')
-          .replace(/\./g, '')
-          .replace(/\s+/g, ' ')
-          .replace(/\s+/g, ',')
-          .replace(/\,,/, ',')
-      );
-
-      window.prerenderReady = true;
-      this.setSeoTags();
+    map(posts, post => {
+      postsArray.push(post);
+      keyWords.push(post.title.toLowerCase());
     });
+
+    for (let i = 0; i < postsArray.length; i++) {
+      postsArray[i].key = keys[i];
+    }
+
+    this.setState({
+      posts: postsArray,
+      workoutPosts: postsArray
+        .filter(post => post.category === 'vežbanje')
+        .reverse(),
+      healthPosts: postsArray
+        .filter(post => post.category === 'zdravlje')
+        .reverse(),
+      foodPosts: postsArray.filter(post => post.category === 'hrana').reverse()
+    });
+
+    this.setMetaTag(
+      'name',
+      'keywords',
+      keyWords
+        .reduce((prev, curr) => prev + ' ' + curr)
+        .replace(/-/g, '')
+        .replace(/\"/g, '')
+        .replace(/\:\)/g, '')
+        .replace(/\./g, '')
+        .replace(/\s+/g, ' ')
+        .replace(/\s+/g, ',')
+        .replace(/\,,/, ',')
+    );
+
+    this.setSeoTags();
   }
   componentWillUnmount() {
     this.state.selectedElements.map(elem => elem.remove());
@@ -237,59 +232,8 @@ class Blog extends Component {
   }
 
   render() {
-    if (this.state.posts && this.state.posts.length > 0) {
-      let orderedPost = [];
-      map(this.state.posts, post => orderedPost.unshift(post));
-      return (
-        <div>
-          <Header />
-          <div className="component blog">
-            <div className="row">
-              <div className="col s1">
-                <button
-                  className="btn waves-effect waves-light"
-                  onClick={() => {
-                    this.toggleMenus('workoutPosts');
-                  }}
-                >
-                  Vežbanje
-                </button>
-                <button
-                  className="btn waves-effect waves-light"
-                  onClick={() => {
-                    this.toggleMenus('healthPosts');
-                  }}
-                >
-                  Zdravlje
-                </button>
-                <button
-                  className="btn waves-effect waves-light"
-                  onClick={() => {
-                    this.toggleMenus('foodPosts');
-                  }}
-                >
-                  Hrana
-                </button>
-              </div>
-              <SideMenu
-                workoutPosts={this.state.postsInSideMenu}
-                toggle={this.state.toggle}
-              />
-              <div className="col s11">
-                <h1 className="hidden">
-                  Fitness Blog Za Žene - Personalni Trener Jelena Stevanović
-                </h1>
-                <div className="row center-align">
-                  {map(orderedPost, post => (
-                    <BlogPostCard post={post} key={post.key} />
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      );
-    }
+    let orderedPost = [];
+    map(this.state.posts, post => orderedPost.unshift(post));
     return (
       <div>
         <Header />
@@ -330,7 +274,9 @@ class Blog extends Component {
                 Fitness Blog Za Žene - Personalni Trener Jelena Stevanović
               </h1>
               <div className="row center-align">
-                <Loader />
+                {map(orderedPost, post => (
+                  <BlogPostCard post={post} key={post.imgUrl} />
+                ))}
               </div>
             </div>
           </div>

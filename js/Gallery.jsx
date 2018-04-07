@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Header from './Header';
 import PropTypes from 'prop-types';
+import $ from 'jquery';
 
 const SingleImage = props => {
   const { image, toggleImage } = props;

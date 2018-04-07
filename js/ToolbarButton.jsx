@@ -1,4 +1,5 @@
 import React from 'react';
+import $ from 'jquery';
 
 const ToolbarButton = props => {
   if (props.user) {
@@ -17,14 +18,22 @@ const ToolbarButton = props => {
               <i className="material-icons">textsms</i>
             </a>
           </li>
-          <li className="waves-effect waves-light"><a onClick={() => {
+          <li className="waves-effect waves-light">
+            <a
+              onClick={() => {
                 props.likeButtonToggle();
-              }}><i id="liked" className="material-icons">thumb_up</i></a></li>
+              }}
+            >
+              <i id="liked" className="material-icons">thumb_up</i>
+            </a>
+          </li>
           <li className="waves-effect waves-light">
             <a><i className="material-icons">share</i></a>
           </li>
           <li className="waves-effect waves-light">
-            <a onClick={() => props.logout()}><i className="material-icons">person</i></a>
+            <a onClick={() => props.logout()}>
+              <i className="material-icons">person</i>
+            </a>
           </li>
         </ul>
       </div>

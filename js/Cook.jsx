@@ -4,57 +4,53 @@ import map from 'lodash/map';
 import { database } from './firebase';
 import Loader from './Loader';
 import RecipeCard from './RecipeCard';
+import $ from 'jquery';
 
 class Cook extends Component {
-  constructor() {
+  constructor(props) {
     super();
-
     this.state = {
+      posts: props.posts,
       recipes: null,
       ready: '',
       selectedElements: []
     };
-
-    this.recipesRef = database.ref('/cookPosts');
   }
   componentDidMount() {
-    this.recipesRef.on('value', snapshot => {
-      let posts = snapshot.val();
-      let keys = Object.keys(posts);
-      let postsArray = [];
-      let keyWords = [];
+    let posts = this.state.posts;
+    let keys = Object.keys(posts);
+    let postsArray = [];
+    let keyWords = [];
 
-      map(posts, post => {
-        postsArray.push(post);
-        keyWords.push(post.title.toLowerCase());
-      });
-
-      for (let i = 0; i < postsArray.length; i++) {
-        postsArray[i].key = keys[i];
-      }
-
-      postsArray = postsArray.reverse();
-
-      this.setState({
-        recipes: postsArray
-      });
-      this.setMetaTag(
-        'name',
-        'keywords',
-        keyWords
-          .reduce((prev, curr) => prev + ' ' + curr)
-          .replace(/-/g, '')
-          .replace(/\"/g, '')
-          .replace(/\:\)/g, '')
-          .replace(/\./g, '')
-          .replace(/\s+/g, ' ')
-          .replace(/\s+/g, ',')
-          .replace(/\,,/, ',')
-      );
-
-      window.prerenderReady = true;
-      this.setSeoTags();
+    map(posts, post => {
+      postsArray.push(post);
+      keyWords.push(post.title.toLowerCase());
     });
+
+    for (let i = 0; i < postsArray.length; i++) {
+      postsArray[i].key = keys[i];
+    }
+
+    postsArray = postsArray.reverse();
+    this.setState({
+      recipes: postsArray
+    });
+
+    this.setMetaTag(
+      'name',
+      'keywords',
+      keyWords
+        .reduce((prev, curr) => prev + ' ' + curr)
+        .replace(/-/g, '')
+        .replace(/\"/g, '')
+        .replace(/\:\)/g, '')
+        .replace(/\./g, '')
+        .replace(/\s+/g, ' ')
+        .replace(/\s+/g, ',')
+        .replace(/\,,/, ',')
+    );
+
+    this.setSeoTags();
   }
 
   componentWillUnmount() {
@@ -187,25 +183,18 @@ class Cook extends Component {
   }
 
   render() {
-    if (this.state.recipes) {
-      return (
-        <div>
-          <Header />
-          <div className="component cook">
-            <div className="row col s12">
-              {this.state.recipes.map(recipe => (
-                <RecipeCard key={recipe.key} recipe={recipe} />
-              ))}
-            </div>
-          </div>
-        </div>
-      );
-    }
     return (
       <div>
-        <Header />
+        <Header
+          firstTitle={'Fitness Kuvar Za Žene'}
+          secondTitle={'Personalni Trener Jelena Stevanović'}
+        />
         <div className="component cook">
-          <Loader />
+          <div className="row col s12">
+            {map(this.state.posts, recipe => (
+              <RecipeCard key={recipe.imgUrl} post={recipe} />
+            ))}
+          </div>
         </div>
       </div>
     );

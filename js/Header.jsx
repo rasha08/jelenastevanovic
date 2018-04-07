@@ -3,42 +3,53 @@ import { Link } from 'react-router-dom';
 const MobileMenu = () => (
   <ul className="left col s12 hide-on-med-and-up mobile-menu">
     <li className="col s12">
-      <Link to="/">
-        <a className="waves-effect waves-light btn">POČETNA</a>
+      <Link to="/" className="waves-effect waves-light btn">
+        POČETNA
       </Link>
     </li>
     <li className="col s12">
-      <Link to="/personalni-treninzi-za-zene">
-        <a className="waves-effect waves-light btn">TRENINZI</a>
+      <Link
+        to="/personalni-treninzi-za-zene"
+        className="waves-effect waves-light btn"
+      >
+        TRENINZI
       </Link>
     </li>
     <li className="col s12">
-      <Link to="/galerija">
-        <a className="waves-effect waves-light btn">GALERIJA</a>
+      <Link to="/galerija" className="waves-effect waves-light btn">
+        GALERIJA
       </Link>
     </li>
     <li className="col s12">
-      <Link to="/fitnes-blog-i-saveti-za-zene">
-        <a className="waves-effect waves-light btn">BLOG</a>
+      <Link
+        to="/fitnes-blog-i-saveti-za-zene"
+        className="waves-effect waves-light btn"
+      >
+        BLOG
       </Link>
     </li>
     <li className="col s12">
-      <Link to="/fitnes-kuvar-i-zdrava-hrana">
-        <a className="waves-effect waves-light btn">KUVAR</a>
+      <Link
+        to="/fitnes-kuvar-i-zdrava-hrana"
+        className="waves-effect waves-light btn"
+      >
+        KUVAR
       </Link>
     </li>
     <li className="col s12">
-      <Link to="/kontakt">
-        <a className="waves-effect waves-light btn">KONTAKT</a>
+      <Link to="/kontakt" className="waves-effect waves-light btn">
+        KONTAKT
       </Link>
     </li>
   </ul>
 );
 class Header extends Component {
-  constructor() {
+  constructor(props) {
     super();
     this.state = {
-      showMenu: false
+      showMenu: false,
+      firstTitle: props ? props.firstTitle : 'Personalni Trener',
+      secondTitle: props ? props.secondTitle : 'Personalni Trener'
     };
     this.toggleMenu = this.toggleMenu.bind(this);
   }
@@ -73,7 +84,7 @@ class Header extends Component {
               </button>
             </ul>
             <div className="col l5 m6 s10 center-align">
-              <h1>Personalni Trener</h1>
+              <h1>{this.state.firstTitle}</h1>
             </div>
             <div className="col l1 m1 s1">
               <img
@@ -83,7 +94,7 @@ class Header extends Component {
               />
             </div>
             <div className="col l6 m6 s10 offset-s2 center-align go-up">
-              <h1>Jelena Stevanović</h1>
+              <h1>{this.state.secondTitle}</h1>
             </div>
             <hr className="left hide-on-med-and-up col s12 center-align" />
           </div>
@@ -91,22 +102,22 @@ class Header extends Component {
             <ul className="left hide-on-small-and-down col s12">
               <li className="col l2 m2 s12 hide-on-med-and-up"><a>MENI</a></li>
               <li className="col l2 m2 s12">
-                <Link to="/"><a>POČETNA</a></Link>
+                <Link to="/">POČETNA</Link>
               </li>
               <li className="col l2 m2 s12">
-                <Link to="/personalni-treninzi-za-zene"><a>TRENINZI</a></Link>
+                <Link to="/personalni-treninzi-za-zene">TRENINZI</Link>
               </li>
               <li className="col l2 m2 s12">
-                <Link to="/galerija"><a>GALERIJA</a></Link>
+                <Link to="/galerija">GALERIJA</Link>
               </li>
               <li className="col l2 m2 s12">
-                <Link to="/fitnes-blog-i-saveti-za-zene"><a>BLOG</a></Link>
+                <Link to="/fitnes-blog-i-saveti-za-zene">BLOG</Link>
               </li>
               <li className="col l2 m2 s12">
-                <Link to="/fitnes-kuvar-i-zdrava-hrana"><a>KUVAR</a></Link>
+                <Link to="/fitnes-kuvar-i-zdrava-hrana">KUVAR</Link>
               </li>
               <li className="col l2 m2 s12">
-                <Link to="/kontakt"><a>KONTAKT</a></Link>
+                <Link to="/kontakt">KONTAKT</Link>
               </li>
             </ul>
           </div>

@@ -6,6 +6,7 @@ import ToolbarButton from './ToolbarButton';
 import CommentBox from './CommentBox';
 import map from 'lodash/map';
 import filter from 'lodash/filter';
+import $ from 'jquery';
 
 const Comments = props => {
   if (props.comments) {
@@ -44,7 +45,7 @@ class Recipe extends Component {
   constructor(props) {
     super();
     this.state = {
-      openPost: null,
+      openPost: props.post,
       postId: props.postId,
       currentUser: null,
       postKey: '',
@@ -52,7 +53,6 @@ class Recipe extends Component {
       commentBox: 'close',
       selectedElements: []
     };
-    this.blogPostsRef = database.ref(`/cookPosts/${this.state.postId}`);
     this.blogPostsCommentsRef = database.ref(
       `/cookPosts/${this.state.postId}/comments/`
     );
@@ -84,37 +84,33 @@ class Recipe extends Component {
     this.toggleCommentBox();
   }
   componentDidMount() {
-    this.blogPostsRef.on('value', snapshot => {
-      let post = snapshot.val();
-      let keyWords = `${post.title} ${post.description}`
-        .toLowerCase()
-        .replace(/-/g, '')
-        .replace(/\"/g, '')
-        .replace(/\:\)/g, '')
-        .replace(/\./g, '')
-        .replace(/\s+/g, ' ')
-        .replace(/\s+/g, ',')
-        .replace(/\,,/, ',');
+    let post = this.state.openPost;
+    let keyWords = `${post.title} ${post.description}`
+      .toLowerCase()
+      .replace(/-/g, '')
+      .replace(/\"/g, '')
+      .replace(/\:\)/g, '')
+      .replace(/\./g, '')
+      .replace(/\s+/g, ' ')
+      .replace(/\s+/g, ',')
+      .replace(/\,,/, ',');
 
-      this.setState({
-        openPost: post
-      });
-
-      let url = `fitnes-kuvar-zdrava-hrana/fitnes-recepti/${this.state.postId}/${post.category}/${post.title
-        .replace(/\s+/g, '-')
-        .toLowerCase()}`;
-      this.setSeoTags(
-        post.title,
-        post.description,
-        keyWords,
-        url,
-        post.imgUrl,
-        post.date,
-        post.ingrediants
-      );
-
-      window.prerenderReady = true;
+    this.setState({
+      openPost: post
     });
+
+    let url = `fitnes-kuvar-zdrava-hrana/fitnes-recepti/${this.state.postId}/${post.category}/${post.title
+      .replace(/\s+/g, '-')
+      .toLowerCase()}`;
+    this.setSeoTags(
+      post.title,
+      post.description,
+      keyWords,
+      url,
+      post.imgUrl,
+      post.date,
+      post.ingrediants
+    );
 
     auth.onAuthStateChanged(currentUser => {
       this.setState({

@@ -3,6 +3,7 @@ import FileInput from 'react-file-input';
 import { database, storage } from './firebase';
 import map from 'lodash/map';
 import Header from './Header';
+import $ from 'jquery';
 
 const AdminBlogPost = props => {
   if (props.show === 'blog') {
